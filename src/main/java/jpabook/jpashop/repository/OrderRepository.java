@@ -3,6 +3,7 @@ package jpabook.jpashop.repository;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,5 +19,17 @@ public class OrderRepository {
     public Order findOne(Long id){
         return em.find(Order.class,id);
     }
-//    public List<Order> findAll(OrderSearch orderSearch){}
+    /*
+    public List<Order> findAll(OrderSearch orderSearch){
+    }
+    */
+    /*
+    JPA Criteria
+     */
+    /*
+    public List<Order> findAllByCriteria(OrderSearch orderSearch){
+
+    }
+
+     */
 }

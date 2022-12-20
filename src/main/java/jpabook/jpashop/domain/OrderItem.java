@@ -12,10 +12,10 @@ public class OrderItem {
     @Column(name = "orders_item_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
 
     private int orderPrice;

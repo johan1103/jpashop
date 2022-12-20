@@ -10,11 +10,16 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery",fetch = FetchType.LAZY)
     private Order order;
 
     @Embedded
     private Address address;
 
     private DeliveryStatus status;
+
+    public void setOrder(Order order){
+        order.setDelivery(this);
+        this.order=order;
+    }
 }

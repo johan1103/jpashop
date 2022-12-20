@@ -14,7 +14,7 @@ public class Order {
     @Column(name = "orders_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     @OneToMany(mappedBy = "order")
@@ -37,5 +37,9 @@ public class Order {
     public void addOrderItems(OrderItem orderItem){
         orderItem.setOrder(this);
         orderItems.add(orderItem);
+    }
+
+    public void setDelivery(Delivery delivery){
+        this.delivery=delivery;
     }
 }

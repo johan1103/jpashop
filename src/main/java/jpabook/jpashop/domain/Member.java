@@ -17,5 +17,12 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")
-    private List<Order> order;
+    private List<Order> orders;
+
+    public void addOrder(Order order){
+        order.setMember(this);
+        orders.add(order);
+    }
+
+
 }

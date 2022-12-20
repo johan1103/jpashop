@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.*;
+import jpabook.jpashop.domain.item.Item;
 import lombok.Getter;
 
 @Entity
@@ -19,4 +20,12 @@ public class OrderItem {
 
     private int orderPrice;
     private int count;
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 }

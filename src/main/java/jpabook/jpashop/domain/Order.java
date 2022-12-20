@@ -28,4 +28,14 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private Status OrderStatus;
+
+    //==연관관계 편의 메서드==//
+    public void setMember(Member member){
+        this.member=member;
+    }
+
+    public void addOrderItems(OrderItem orderItem){
+        orderItem.setOrder(this);
+        orderItems.add(orderItem);
+    }
 }

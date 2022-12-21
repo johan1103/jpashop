@@ -30,11 +30,12 @@ public class OrderItem {
     }
 
     //==생성 로직==//
-    public OrderItem(Item item, Order order,int orderPrice,int count){
-        this.item=item;
-        this.order=order;
-        this.orderPrice=orderPrice;
-        this.count=count;
+    public static OrderItem createOrderItem(Item item, int orderPrice,int count){
+        OrderItem orderItem = new OrderItem();
+        orderItem.item=item;
+        orderItem.orderPrice=orderPrice;
+        orderItem.count=count;
+        return orderItem;
     }
     /**
      * 파라미터 없는 생성자 외부 사용 차단

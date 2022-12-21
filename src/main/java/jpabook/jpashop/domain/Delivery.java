@@ -18,8 +18,23 @@ public class Delivery {
 
     private DeliveryStatus status;
 
+    public static Delivery createDelivery(Address address,DeliveryStatus deliveryStatus){
+        Delivery delivery = new Delivery();
+        delivery.setAddress(address);
+        delivery.setStatus(deliveryStatus);
+        return delivery;
+    }
+    protected Delivery(){
+    }
+
     public void setOrder(Order order){
         order.setDelivery(this);
         this.order=order;
+    }
+    public void setAddress(Address address){
+        this.address=address;
+    }
+    public void setStatus(DeliveryStatus deliveryStatus){
+        this.status=deliveryStatus;
     }
 }

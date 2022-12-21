@@ -49,14 +49,16 @@ public class Order {
     }
 
     //==생성 메서드==//
-    public Order(Member member, Delivery delivery,OrderItem ... orderItems){
-        this.setMember(member);
-        this.setDelivery(delivery);
+    public static Order createOrder(Member member, Delivery delivery,OrderItem ... orderItems){
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
         for(OrderItem orderItem : orderItems){
-            this.addOrderItems(orderItem);
+            order.addOrderItems(orderItem);
         }
-        this.setOrderDate();
-        this.setOrderStatus(Status.ORDER);
+        order.setOrderDate();
+        order.setOrderStatus(Status.ORDER);
+        return order;
     }
 
     /**

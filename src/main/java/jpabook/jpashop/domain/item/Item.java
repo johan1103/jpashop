@@ -26,6 +26,15 @@ public abstract class Item {
 
      */
 
+    public void setName(String name){
+        this.name=name;
+    }
+    public void setPrice(int price){
+        this.price=price;
+    }
+    public void setStockQuantity(int quantity){
+        this.stockQuantity=quantity;
+    }
     //== 비즈니스 로직 추가 ==//
 
     /**

@@ -5,18 +5,23 @@ import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.OrderItemRepository;
+import jpabook.jpashop.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
     /**
      * 주문
      */
+    @Transactional
     public Long order(Long memberId,Long itemId,int count){
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
@@ -30,6 +35,15 @@ public class OrderService {
 
         //Order 생성
         Order order = Order.createOrder(member,delivery,orderItem);
+        orderRepository.save(order);
+        return order.getId();
+    }
+
+    public Long cancelOrder(Long orderId){
+        //주문 엔티티 조회
+        Order order = orderRepository.findOne(orderId);
+        //주문 취소
+        order.cancel();
         return order.getId();
     }
 }

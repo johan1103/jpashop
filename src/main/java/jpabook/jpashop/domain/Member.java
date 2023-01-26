@@ -25,11 +25,16 @@ public class Member {
         order.setMember(this);
         orders.add(order);
     }
-    public void setAddress(Address address){
+    private void setAddress(Address address){
         this.address=address;
     }
-    public void setName(String name){
+    private void setName(String name){
         this.name=name;
+    }
+
+    public void createMember(String name,Address address){
+        setName(name);
+        setAddress(address);
     }
 
 }

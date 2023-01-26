@@ -37,4 +37,8 @@ public class Member {
         setAddress(address);
     }
 
+    public void updateName(String name){
+        setName(name);
+    }
+
 }

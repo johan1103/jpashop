@@ -20,9 +20,9 @@
             <tr th:each="member : ${members}">
                 <td th:text="${member.id}"></td>
                 <td th:text="${member.name}"></td>
-                <td th:text="${member.address?.city}"></td>
-                <td th:text="${member.address?.street}"></td>
-                <td th:text="${member.address?.zipcode}"></td>
+                <td th:text="${member.address.city}"></td>
+                <td th:text="${member.address.street}"></td>
+                <td th:text="${member.address.zipcode}"></td>
             </tr>
             </tbody>
         </table>

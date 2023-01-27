@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
@@ -80,4 +83,58 @@ public class MemberApiController {
     public static class CreateMemberResponse{
         private Long id;
     }
+
+
+    /**
+     * 전체 멤버 조회 API
+     */
+
+    /**
+     * V1 멤버 조회 API
+     * 단점
+     * 1. List 형태로의 반환
+     *      json으로 변환시에 컬랙션 형태의 경우 배열로 반환되는데 이는 API 스펙의 확장성을 크게 해지는 방식이다.
+     *      ex. 멤버 리스트와 그 중 지역이 서울인 멤버의 수도 같이 보내주세요
+     * 2. 엔티티 자체를 반환
+     *      엔티티를 반환하게 되면 위의 문제점과 같이 API스펙이 엔티티에게 의존적이다
+     *      필요 없는 정보까지 받게 된다. (제외 할 수는 있지만, 다른 모든 api 클라이언트에게도 제외된다.)
+     */
+    @GetMapping("/api/v1/members")
+    public List<Member> membersV1(){
+        return memberService.findMembers();
+    }
+
+    /**
+     * V2 개선점
+     * 1. 반환값을 컬랙션 형태가 아닌 단일 객체 인스턴스를 반환 했다.
+     *      다른 추가 정보도 담을 수 있도록 확장성을 확보했다.
+     * 2. 배열 내부의 인스턴스를 DTO로 변환했다.
+     *      API 스펙이 DTO에게 의존적이며, 엔티티로부터 독립적으로 바뀌었다.
+     */
+
+    @GetMapping("/api/v2/members")
+    public Result<List<MemberDto>> membersV2(){
+        List<Member> members = memberService.findMembers();
+        List<MemberDto> memberDtos = members.stream().map( m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+        return new Result<List<MemberDto>>(memberDtos);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    public static class Result<T>{
+        private T data;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class MemberDto{
+        private String name;
+    }
+
+
+
+
+
+
 }

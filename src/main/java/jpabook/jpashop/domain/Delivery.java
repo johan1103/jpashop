@@ -9,8 +9,7 @@ public class Delivery {
     @Id @GeneratedValue
     @Column(name = "delivery_id")
     private Long id;
-
-    @OneToOne(mappedBy = "delivery",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order order;
 
     @Embedded
@@ -29,7 +28,7 @@ public class Delivery {
 
     public void setOrder(Order order){
         order.setDelivery(this);
-        this.order=order;
+        //this.order=order;
     }
     public void setAddress(Address address){
         this.address=address;

@@ -1,10 +1,12 @@
 package jpabook.jpashop.service;
 
+import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    private final EntityManager em;
     /**
      * 회원 가입 조건
      * 중복 이름 불가

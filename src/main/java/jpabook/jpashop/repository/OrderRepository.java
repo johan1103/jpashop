@@ -19,6 +19,7 @@ public class OrderRepository {
     public void save(Order order){
         em.persist(order);
     }
+    public List<Order> findAll(){return em.createQuery("select o from Order o",Order.class).getResultList();}
 
     public Order findOne(Long id){
         return em.find(Order.class,id);
@@ -55,5 +56,21 @@ public class OrderRepository {
             query = query.setParameter("name", orderSearch.getMemberName());
         }
         return query.getResultList();
+    }
+    public List<Order> findAllWithMemberDelivery(){
+        return em.createQuery("select o from Order o join fetch o.delivery d" +
+                " join fetch o.member m",Order.class).getResultList();
+    }
+
+    public List<Order> findAllWithOrderItem(){
+        /**
+         * HHH90003004: firstResult/maxResults specified with collection fetch; applying in memory
+         * 발생하면서 DB에는 페이징 쿼리가 날라가지 않고 메모리에서 페이징 처리를 한다.
+         */
+        return em.createQuery("select o from Order o join fetch o.delivery d " +
+                "join fetch o.member m join fetch o.orderItems oi join fetch oi.item i",Order.class)
+                .setFirstResult(0)
+                .setMaxResults(10)
+                .getResultList();
     }
 }

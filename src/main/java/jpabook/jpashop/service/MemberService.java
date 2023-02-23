@@ -2,6 +2,7 @@ package jpabook.jpashop.service;
 
 import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     private final EntityManager em;
     /**
@@ -27,6 +29,14 @@ public class MemberService {
         memberRepository.save(member);
         return member.getId();
     }
+
+    @Transactional
+    public Long jpaJoin(Member member){
+        validateDuplicateMember(member.getName());
+        memberJpaRepository.save(member);
+        return member.getId();
+    }
+
 
     /**
      * 회원 정보 수정

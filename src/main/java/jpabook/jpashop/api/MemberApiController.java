@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -116,6 +117,23 @@ public class MemberApiController {
     public Result<List<MemberDto>> membersV2(){
         List<Member> members = memberService.findMembers();
         List<MemberDto> memberDtos = members.stream().map( m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+        return new Result<List<MemberDto>>(memberDtos);
+    }
+
+    @GetMapping("/api/v3/members")
+    public Result<List<MemberDto>> membersV3(@RequestParam(value = "offset")Integer offset,
+                                             @RequestParam(value = "size")Integer size){
+        List<Member> members = memberService.findMembersJpa(offset,size).getContent();
+        List<MemberDto> memberDtos = members.stream().map(m->new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+        return new Result<List<MemberDto>>(memberDtos);
+    }
+    @GetMapping("/api/v3-2/members")
+    public Result<List<MemberDto>> membersV3_2(@RequestParam(value = "offset")Integer offset,
+                                                                             @RequestParam(value = "size")Integer size){
+        List<Member> members = memberService.findMembersSliceJpa(offset,size).getContent();
+        List<MemberDto> memberDtos = members.stream().map(m->new MemberDto(m.getName()))
                 .collect(Collectors.toList());
         return new Result<List<MemberDto>>(memberDtos);
     }

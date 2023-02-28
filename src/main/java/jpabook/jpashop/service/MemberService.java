@@ -5,6 +5,9 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.reactive.TransactionSynchronizationManager;
@@ -65,6 +68,16 @@ public class MemberService {
      */
     public List<Member> findMembers(){
         return memberRepository.findAll();
+    }
+    public Page<Member> findMembersJpa(Integer offset, Integer size){
+        PageRequest pageRequest = PageRequest.of(offset, size);
+        Page<Member> memberPage = memberJpaRepository.findAllMember(pageRequest);
+        return memberPage;
+    }
+    public Slice<Member> findMembersSliceJpa(Integer offset, Integer size){
+        PageRequest pageRequest = PageRequest.of(offset, size);
+        Slice<Member> memberSlice = memberJpaRepository.findAllMemberBySlice(pageRequest);
+        return memberSlice;
     }
     public Member findOne(Long memberId){
         return memberRepository.findOne(memberId);

@@ -19,8 +19,7 @@ public class InitDb {
 
     @PostConstruct
     public void Init(){
-        initService.dbInit1();
-        initService.dbInit2();
+        initService.dbInitLotOfMembers();
     }
 
     @Component
@@ -30,6 +29,12 @@ public class InitDb {
         private final EntityManager em;
         private final MemberService memberService;
 
+        public void dbInitLotOfMembers(){
+            for(int i=1;i<=100;i++){
+                Member member = createMember("user"+i,"서울","1","1111");
+                em.persist(member);
+            }
+        }
         public void dbInit1(){
             Member member = createMember("userA", "서울", "1", "1111");
             em.persist(member);

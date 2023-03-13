@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @Transactional
 public class MemberServiceTest {
 
@@ -18,7 +17,7 @@ public class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Test
-    public void 회원가입() throws Exception{
+    public void joinTest() throws Exception{
         //give
         Member member = new Member();
         member.createMember("kim",null);
@@ -28,7 +27,7 @@ public class MemberServiceTest {
         assertEquals(member,memberRepository.findOne(joinMemberId));
     }
     @Test
-    public void 중복_회원_조회() throws Exception{
+    public void duplicatedMemberTest() throws Exception{
         //given
         Member member1=new Member();
         member1.createMember("joe",null);

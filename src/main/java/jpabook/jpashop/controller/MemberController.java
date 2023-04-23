@@ -3,6 +3,8 @@ package jpabook.jpashop.controller;
 import jakarta.validation.Valid;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.log.CustomTracer;
+import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final CustomTracer customTracer;
 
     @GetMapping(value = "members/new")
     public String createForm(Model model){
@@ -39,7 +42,18 @@ public class MemberController {
 
     @GetMapping(value = "/members")
     public String list(Model model){
-        model.addAttribute("members",memberService.findMembers());
+
+        List<Member> members = null;
+        TraceStatus status = null;
+        try {
+            status = customTracer.begin(0,"list");
+            members = memberService.findMembers(status);
+            customTracer.complete(status,"list",null);
+        }catch (Exception e){
+            customTracer.complete(status,"list",e);
+            throw e;
+        }
+        model.addAttribute("members",members);
         return "members/memberList";
     }
 }

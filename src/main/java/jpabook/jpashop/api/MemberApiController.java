@@ -102,7 +102,7 @@ public class MemberApiController {
      */
     @GetMapping("/api/v1/members")
     public List<Member> membersV1(){
-        return memberService.findMembers();
+        return memberService.findMembers(null);
     }
 
     /**
@@ -115,7 +115,7 @@ public class MemberApiController {
 
     @GetMapping("/api/v2/members")
     public Result<List<MemberDto>> membersV2(){
-        List<Member> members = memberService.findMembers();
+        List<Member> members = memberService.findMembers(null);
         List<MemberDto> memberDtos = members.stream().map( m -> new MemberDto(m.getName()))
                 .collect(Collectors.toList());
         return new Result<List<MemberDto>>(memberDtos);

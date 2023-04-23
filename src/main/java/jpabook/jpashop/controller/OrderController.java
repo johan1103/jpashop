@@ -23,7 +23,7 @@ public class OrderController {
 
     @GetMapping(value = "/order")
     public String createForm(Model model){
-        List<Member> members = memberService.findMembers();
+        List<Member> members = memberService.findMembers(null);
         List<Item> items = itemService.findItems();
         model.addAttribute("members",members);
         model.addAttribute("items",items);

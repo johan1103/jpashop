@@ -2,6 +2,8 @@ package jpabook.jpashop.service;
 
 import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.log.CustomTracer;
+import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberJpaRepository memberJpaRepository;
+    private final CustomTracer customTracer;
 
     private final EntityManager em;
     /**
@@ -66,8 +69,18 @@ public class MemberService {
     /**
      * 전체 회원 조회
      */
-    public List<Member> findMembers(){
-        return memberRepository.findAll();
+    public List<Member> findMembers(TraceStatus beforeStatus){
+        List<Member> members = null;
+        TraceStatus status = null;
+        try {
+            status = customTracer.beginSync(beforeStatus,"findMembers");
+            members = memberRepository.findAll();
+            customTracer.complete(status,"findMembers",null);
+        }catch (Exception e){
+            customTracer.complete(status,"findMembers",e);
+            throw e;
+        }
+        return members;
     }
     public Page<Member> findMembersJpa(Integer offset, Integer size){
         PageRequest pageRequest = PageRequest.of(offset, size);

@@ -2,8 +2,9 @@ package jpabook.jpashop.service;
 
 import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.log.CustomTracer;
+import jpabook.jpashop.log.ParameterTracer;
 import jpabook.jpashop.log.TraceStatus;
+import jpabook.jpashop.log.Tracer;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.reactive.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberJpaRepository memberJpaRepository;
-    private final CustomTracer customTracer;
+    private final Tracer logTracer;
 
     private final EntityManager em;
     /**
@@ -73,11 +73,11 @@ public class MemberService {
         List<Member> members = null;
         TraceStatus status = null;
         try {
-            status = customTracer.beginSync(beforeStatus,"findMembers");
+            status = logTracer.begin("findMembers");
             members = memberRepository.findAll();
-            customTracer.complete(status,"findMembers",null);
+            logTracer.complete(status,null);
         }catch (Exception e){
-            customTracer.complete(status,"findMembers",e);
+            logTracer.complete(status,e);
             throw e;
         }
         return members;

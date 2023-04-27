@@ -15,10 +15,11 @@ public class TraceStatus {
         this.message=message;
         this.startTimeMs=startTimeMs;
     }
-    public static TraceStatus createTraceStatus(String message, Long startTimeMs){
-        return new TraceStatus(TraceId.create(0),message,startTimeMs);
+    public static TraceStatus createTraceStatus(TraceId traceId, String message, Long startTimeMs){
+        return new TraceStatus(traceId,message,startTimeMs);
     }
     public static TraceStatus nextStatus(TraceId traceId, String message, Long startTimeMs){
-        return new TraceStatus(TraceId.nextLevel(traceId), message, startTimeMs);
+        traceId.nextLevel();
+        return new TraceStatus(traceId, message, startTimeMs);
     }
 }

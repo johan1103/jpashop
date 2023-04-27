@@ -11,7 +11,7 @@ public class ParameterTracer {
     private static final String EX_PREFIX = "<X-";
 
     public TraceStatus begin(Integer level, String message){
-        TraceStatus status = TraceStatus.createTraceStatus(message, System.currentTimeMillis());
+        TraceStatus status = TraceStatus.createTraceStatus(TraceId.create(),message, System.currentTimeMillis());
         log.info("[{}] {}{}",status.getTraceId().getTransactionId(),getPrefix(START_PREFIX, level),message);
         return status;
     }

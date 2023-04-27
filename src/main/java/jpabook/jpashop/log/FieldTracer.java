@@ -11,31 +11,30 @@ public class FieldTracer implements Tracer{
 
     @Override
     public TraceStatus begin(String message){
-        TraceStatus status = (this.traceId==null ? TraceStatus.createTraceStatus(message, System.currentTimeMillis())
-                : TraceStatus.nextStatus(traceId, message, System.currentTimeMillis()));
-        this.traceId = status.getTraceId();
+        if(traceId==null) traceId = TraceId.create();
+        else traceId.nextLevel();
+        TraceStatus status = TraceStatus.createTraceStatus(traceId, message, System.currentTimeMillis());
         log.info("[{}] {}{}",status.getTraceId().getTransactionId(),getPrefix(START_PREFIX, traceId.getLevel()),message);
         return status;
     }
     @Override
-    public TraceStatus complete(TraceStatus status, Exception ex){
+    public void complete(TraceStatus status, Exception ex){
         if(ex==null){
-            return end(status);
+            end(status);
         }else{
-            return exceptionEnd(status, ex);
+            exceptionEnd(status, ex);
         }
+        traceId.previousLevel();
     }
-    private TraceStatus end(TraceStatus status){
+    private void end(TraceStatus status){
         log.info("[{}] {}{} ({}ms)",traceId.getTransactionId(),
                 getPrefix(COMPLETE_PREFIX, traceId.getLevel()),status.getMessage()
                 ,System.currentTimeMillis()-status.getStartTimeMs());
-        return status;
     }
-    private TraceStatus exceptionEnd(TraceStatus status, Exception ex){
+    private void exceptionEnd(TraceStatus status, Exception ex){
         log.info("[{}] {}{}(Ex:{}) ({}ms)",traceId.getTransactionId(),
                 getPrefix(EX_PREFIX, traceId.getLevel()),status.getMessage(),
                 ex.getMessage(),System.currentTimeMillis()-status.getStartTimeMs());
-        return status;
     }
     private String getPrefix(String prefix, Integer level){
         StringBuilder result= new StringBuilder();

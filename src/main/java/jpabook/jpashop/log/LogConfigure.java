@@ -8,6 +8,6 @@ public class LogConfigure {
 
     @Bean
     public Tracer logTracer(){
-        return new FieldTracer();
+        return new ThreadLocalTracer();
     }
 }

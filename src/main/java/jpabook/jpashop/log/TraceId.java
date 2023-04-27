@@ -13,15 +13,14 @@ public class TraceId {
         this.transactionId=transactionId;
         this.level=level;
     }
-    public static TraceId create(Integer level){
+    public static TraceId create(){
         String transactionId = UUID.randomUUID().toString().substring(0,8);
-        return new TraceId(transactionId, level);
+        return new TraceId(transactionId, 0);
     }
-    public static TraceId nextLevel(TraceId traceId){
-        return new TraceId(traceId.getTransactionId(), traceId.getLevel()+1);
+    public void nextLevel(){
+        this.level+=1;
     }
-    public static TraceId previousLevel(TraceId traceId) throws LowestLevelException{
-        if(traceId.getLevel()==0) throw new LowestLevelException();
-        return new TraceId(traceId.getTransactionId(), traceId.getLevel()-1);
+    public void previousLevel(){
+        if(this.level!=0)this.level-=1;
     }
 }

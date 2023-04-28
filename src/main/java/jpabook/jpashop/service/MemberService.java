@@ -5,6 +5,7 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.log.ParameterTracer;
 import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.log.Tracer;
+import jpabook.jpashop.log.template.AbstractTemplate;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,18 +70,14 @@ public class MemberService {
     /**
      * 전체 회원 조회
      */
-    public List<Member> findMembers(TraceStatus beforeStatus){
-        List<Member> members = null;
-        TraceStatus status = null;
-        try {
-            status = logTracer.begin("findMembers");
-            members = memberRepository.findAll();
-            logTracer.complete(status,null);
-        }catch (Exception e){
-            logTracer.complete(status,e);
-            throw e;
-        }
-        return members;
+    public List<Member> findMembers(){
+        AbstractTemplate<List<Member>> template = new AbstractTemplate<>(logTracer) {
+            @Override
+            protected List<Member> call() {
+                return memberRepository.findAll();
+            }
+        };
+        return template.execute("findMembers");
     }
     public Page<Member> findMembersJpa(Integer offset, Integer size){
         PageRequest pageRequest = PageRequest.of(offset, size);

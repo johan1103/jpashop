@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.log.ParameterTracer;
 import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.log.Tracer;
+import jpabook.jpashop.log.template.AbstractTemplate;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -43,17 +44,14 @@ public class MemberController {
 
     @GetMapping(value = "/members")
     public String list(Model model){
-
         List<Member> members = null;
-        TraceStatus status = null;
-        try {
-            status = logTracer.begin("list");
-            members = memberService.findMembers(status);
-            logTracer.complete(status,null);
-        }catch (Exception e){
-            logTracer.complete(status,e);
-            throw e;
-        }
+        AbstractTemplate<List<Member>> template = new AbstractTemplate<>(logTracer) {
+            @Override
+            protected List<Member> call() {
+                return memberService.findMembers();
+            }
+        };
+        members = template.execute("list");
         model.addAttribute("members",members);
         return "members/memberList";
     }

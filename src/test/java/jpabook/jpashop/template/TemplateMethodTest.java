@@ -39,7 +39,7 @@ public class TemplateMethodTest {
 
     @Test
     void templateMethodV1(){
-        AbstractTemplate template = null;
+        AbstractTemplate<String> template = null;
 
         template = new TemplateImpl1();
         template.execute();
@@ -51,9 +51,9 @@ public class TemplateMethodTest {
 
     @Test
     void templateMethodV2(){
-        AbstractTemplate template = null;
+        AbstractTemplate<String> template = null;
 
-        template = new AbstractTemplate<String>() {
+        template = new AbstractTemplate<>() {
             @Override
             protected String call() {
                 log.info("비즈니스 로직 1 실행");
@@ -62,7 +62,7 @@ public class TemplateMethodTest {
         };
         log.info("result : {}",template.execute());
 
-        template = new AbstractTemplate<String>() {
+        template = new AbstractTemplate<>() {
             @Override
             protected String call() {
                 log.info("비즈니스 로직 2 실행");

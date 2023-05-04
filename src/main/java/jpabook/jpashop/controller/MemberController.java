@@ -19,7 +19,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final LogTemplate<Object> logTemplate;
+    private final LogTemplate logTemplate;
 
     @GetMapping(value = "members/new")
     public String createForm(Model model){
@@ -32,16 +32,19 @@ public class MemberController {
         if(result.hasErrors()){
             return "members/createMemberForm";
         }
-        Address address = new Address(memberForm.getCity(),memberForm.getStreet(),memberForm.getZipcode());
-        Member member = new Member();
-        member.createMember(memberForm.getName(), address);
-        memberService.join(member);
+        logTemplate.execute("new Members!",()->{
+            Address address = new Address(memberForm.getCity(),memberForm.getStreet(),memberForm.getZipcode());
+            Member member = new Member();
+            member.createMember(memberForm.getName(), address);
+            memberService.join(member);
+            return "ok";
+        });
         return "redirect:/";
     }
 
     @GetMapping(value = "/members")
     public String list(Model model){
-        List<Member> members = (List<Member>)logTemplate.execute("list", memberService::findMembers);
+        List<Member> members = logTemplate.execute("list", memberService::findMembers);
         model.addAttribute("members",members);
         return "members/memberList";
     }

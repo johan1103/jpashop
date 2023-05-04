@@ -65,7 +65,7 @@ public class MemberService {
      * 전체 회원 조회
      */
     public List<Member> findMembers(){
-        return (List<Member>) logTemplate.execute("findMembers", memberRepository::findAll);
+        return logTemplate.execute("findMembers", memberRepository::findAll);
     }
     public Page<Member> findMembersJpa(Integer offset, Integer size){
         PageRequest pageRequest = PageRequest.of(offset, size);

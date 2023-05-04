@@ -2,9 +2,8 @@ package jpabook.jpashop.service;
 
 import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.log.ParameterTracer;
-import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.log.Tracer;
+import jpabook.jpashop.log.strategy.LogTemplate;
 import jpabook.jpashop.log.template.AbstractTemplate;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
@@ -26,6 +25,7 @@ public class MemberService {
     private final Tracer logTracer;
 
     private final EntityManager em;
+    private final LogTemplate logTemplate;
     /**
      * 회원 가입 조건
      * 중복 이름 불가
@@ -71,13 +71,7 @@ public class MemberService {
      * 전체 회원 조회
      */
     public List<Member> findMembers(){
-        AbstractTemplate<List<Member>> template = new AbstractTemplate<>(logTracer) {
-            @Override
-            protected List<Member> call() {
-                return memberRepository.findAll();
-            }
-        };
-        return template.execute("findMembers");
+        return (List<Member>) logTemplate.execute("findMembers", memberRepository::findAll);
     }
     public Page<Member> findMembersJpa(Integer offset, Integer size){
         PageRequest pageRequest = PageRequest.of(offset, size);

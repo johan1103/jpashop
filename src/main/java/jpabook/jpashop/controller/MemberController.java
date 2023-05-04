@@ -3,10 +3,8 @@ package jpabook.jpashop.controller;
 import jakarta.validation.Valid;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.log.ParameterTracer;
-import jpabook.jpashop.log.TraceStatus;
 import jpabook.jpashop.log.Tracer;
-import jpabook.jpashop.log.template.AbstractTemplate;
+import jpabook.jpashop.log.strategy.LogTemplate;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,6 +21,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final Tracer logTracer;
+    private final LogTemplate<Object> logTemplate;
 
     @GetMapping(value = "members/new")
     public String createForm(Model model){
@@ -44,14 +43,7 @@ public class MemberController {
 
     @GetMapping(value = "/members")
     public String list(Model model){
-        List<Member> members = null;
-        AbstractTemplate<List<Member>> template = new AbstractTemplate<>(logTracer) {
-            @Override
-            protected List<Member> call() {
-                return memberService.findMembers();
-            }
-        };
-        members = template.execute("list");
+        List<Member> members = (List<Member>)logTemplate.execute("list", memberService::findMembers);
         model.addAttribute("members",members);
         return "members/memberList";
     }

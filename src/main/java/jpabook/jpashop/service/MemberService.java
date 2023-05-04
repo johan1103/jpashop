@@ -1,10 +1,7 @@
 package jpabook.jpashop.service;
 
-import jakarta.persistence.EntityManager;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.log.Tracer;
 import jpabook.jpashop.log.strategy.LogTemplate;
-import jpabook.jpashop.log.template.AbstractTemplate;
 import jpabook.jpashop.repository.MemberJpaRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +19,6 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberJpaRepository memberJpaRepository;
-    private final Tracer logTracer;
-
-    private final EntityManager em;
     private final LogTemplate logTemplate;
     /**
      * 회원 가입 조건

@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LogTemplate<T> {
+public class LogTemplate {
     private final Tracer tracer;
-    public T execute(String message,CallBack<T> callBack){
+    public <T> T execute(String message,CallBack<T> callBack){
         TraceStatus status = tracer.begin(message);
         T result = null;
         try{

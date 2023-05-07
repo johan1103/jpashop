@@ -15,4 +15,4 @@ jobs:
       - name: Print working directory
         run: pwd
       - name: List files
-        run: ls-al
+        run: ls -al

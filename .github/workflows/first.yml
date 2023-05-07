@@ -16,3 +16,5 @@ jobs:
         run: pwd
       - name: List files
         run: ls -al
+      - name: Get our Codes
+        uses: actions/checkout@v3

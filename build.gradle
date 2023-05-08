@@ -29,9 +29,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//implementation 'mysql:mysql-connector-java'
-    // https://mvnrepository.com/artifact/com.h2database/h2
+	implementation 'mysql:mysql-connector-java'
     implementation'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 }
 

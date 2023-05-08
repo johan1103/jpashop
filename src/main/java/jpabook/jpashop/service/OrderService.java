@@ -14,42 +14,42 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OrderService {
-    private final MemberRepository memberRepository;
-    private final ItemRepository itemRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
-    private final DeliveryRepository deliveryRepository;
-    /**
-     * 주문
-     */
-    @Transactional
-    public Long order(Long memberId,Long itemId,int count){
-        //엔티티 조회
-        Member member = memberRepository.findOne(memberId);
-        Item item = itemRepository.findOne(itemId);
+  private final MemberRepository memberRepository;
+  private final ItemRepository itemRepository;
+  private final OrderItemRepository orderItemRepository;
+  private final OrderRepository orderRepository;
+  private final DeliveryRepository deliveryRepository;
+  /**
+   * 주문
+   */
+  @Transactional
+  public Long order(Long memberId,Long itemId,int count){
+    //엔티티 조회
+    Member member = memberRepository.findOne(memberId);
+    Item item = itemRepository.findOne(itemId);
 
-        //배송정보 생성
-        Delivery delivery = Delivery.createDelivery(member.getAddress(), DeliveryStatus.READY);
-        deliveryRepository.save(delivery);
-        OrderItem orderItem = OrderItem.createOrderItem(item,item.getPrice(),count);
-        orderItemRepository.save(orderItem);
+    //배송정보 생성
+    Delivery delivery = Delivery.createDelivery(member.getAddress(), DeliveryStatus.READY);
+    deliveryRepository.save(delivery);
+    OrderItem orderItem = OrderItem.createOrderItem(item,item.getPrice(),count);
+    orderItemRepository.save(orderItem);
 
-        //Order 생성
-        Order order = Order.createOrder(member,delivery,orderItem);
-        orderRepository.save(order);
-        return order.getId();
-    }
+    //Order 생성
+    Order order = Order.createOrder(member,delivery,orderItem);
+    orderRepository.save(order);
+    return order.getId();
+  }
 
-    @Transactional
-    public Long cancelOrder(Long orderId){
-        //주문 엔티티 조회
-        Order order = orderRepository.findOne(orderId);
-        //주문 취소
-        order.cancel();
-        return order.getId();
-    }
-    public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByString(orderSearch);
-    }
-    public List<Order> findAll(){return orderRepository.findAll();}
+  @Transactional
+  public Long cancelOrder(Long orderId){
+    //주문 엔티티 조회
+    Order order = orderRepository.findOne(orderId);
+    //주문 취소
+    order.cancel();
+    return order.getId();
+  }
+  public List<Order> findOrders(OrderSearch orderSearch) {
+    return orderRepository.findAllByString(orderSearch);
+  }
+  public List<Order> findAll(){return orderRepository.findAll();}
 }
